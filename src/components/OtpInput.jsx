@@ -23,10 +23,13 @@ const OtpInput = ({ length = 4, onSubmit = () => {} }) => {
     }
   };
   const handleClick = (index) => {
-    inputRef.current[index].setSelectionRange(1, 1)
+    inputRef.current[index].setSelectionRange(1, 1);
+
+    if(index > 0 && !otp[index - 1]){
+        inputRef.current[otp.indexOf("")].focus()
+    }
   };
   const handleKeyDown = (index, e) => {
-    console.log(index, e.key, otp);
     if (
       e.key == "Backspace" &&
       !otp[index] &&
