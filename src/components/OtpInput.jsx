@@ -12,10 +12,30 @@ const OtpInput = ({ length = 4, onSubmit = () => {} }) => {
     newOtp[index] = value.substring(value.length - 1);
     setOtp(newOtp);
 
-    
+    const combineOtp = newOtp.join("");
+    if (combineOtp.length == length) {
+      onSubmit(combineOtp);
+    }
+
+    // move to the next input if current field is filled
+    if (value && index < length - 1 && inputRef.current[index + 1]) {
+      inputRef.current[index + 1].focus();
+    }
   };
-  const handleClick = () => {};
-  const handleKeyDown = () => {};
+  const handleClick = (index) => {
+    inputRef.current[index].setSelectionRange(1, 1)
+  };
+  const handleKeyDown = (index, e) => {
+    console.log(index, e.key, otp);
+    if (
+      e.key == "Backspace" &&
+      !otp[index] &&
+      index > 0 &&
+      inputRef.current[index - 1]
+    ) {
+      inputRef.current[index - 1].focus();
+    }
+  };
 
   useEffect(() => {
     if (inputRef.current[0]) {
@@ -33,7 +53,7 @@ const OtpInput = ({ length = 4, onSubmit = () => {} }) => {
             value={value}
             onChange={(e) => handleChange(index, e)}
             onClick={() => handleClick(index)}
-            onKeyDown={() => handleKeyDown(index, e)}
+            onKeyDown={(e) => handleKeyDown(index, e)}
             className="otpInput"
             ref={(input) => (inputRef.current[index] = input)}
           />
